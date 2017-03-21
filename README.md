@@ -55,7 +55,7 @@ The generated report has been tested to work in Chrome. It *should* work in any 
     reporter: 'mochawesome'
   });
   ```
-
+ 
 ##Output
 Mochawesome generates the following inside your project directory:
 ```
