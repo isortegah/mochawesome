@@ -18,6 +18,7 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var done = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(output, config, failures, exit) {
+    console.log(config);
     var reportJsonFile, reportHtmlFile;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -26,18 +27,25 @@ var done = function () {
             reportJsonFile = config.reportJsonFile, reportHtmlFile = config.reportHtmlFile;
             _context.prev = 1;
             _context.next = 4;
-            return saveFile(reportJsonFile, output);
-
+            if(config.writeReporte)
+              return saveFile(reportJsonFile, output);
+            else
+              return true;
           case 4:
-            log('Report JSON saved to ' + reportJsonFile, null, config);
+            if(config.writeReporte){
+              log('Report JSON saved to ' + reportJsonFile, null, config);
 
-            // Create and save the HTML to disk
-            _context.next = 7;
-            return marge.create(output, config);
+              // Create and save the HTML to disk
+              _context.next = 7;
+              return marge.create(output, config);
+            }else{
+              _context.next = 15;
+              return true;  
+            }
+              
 
           case 7:
             log('Report HTML saved to ' + reportHtmlFile, null, config);
-
             exit(failures);
             _context.next = 15;
             break;
@@ -77,7 +85,6 @@ var stringify = require('json-stringify-safe');
 var conf = require('./config');
 var marge = require('mochawesome-report-generator');
 var utils = require('./utils');
-
 // Import the utility functions
 var log = utils.log,
     getPercentClass = utils.getPercentClass,
