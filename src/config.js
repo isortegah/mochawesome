@@ -10,7 +10,10 @@ const baseConfig = {
   enableCharts: true,
   enableCode: true,
   quiet: false,
-  dev: false
+  dev: false,
+  writeReporte: true,
+  bunyanSlack: false,
+  bunyanSlackObject: {}
 };
 
 function _getOption(optToGet, options, isBool) {
@@ -51,6 +54,9 @@ module.exports = function (opts) {
   options.enableCode = _getOption('enableCode', opts, true);
   options.quiet = _getOption('quiet', opts, true);
   options.dev = _getOption('dev', opts, true);
+  options.writeReporte      = _getOption('writeReporte', opts ,  true);
+  options.bunyanSlack       = _getOption('bunyanSlack' , opts , true);
+  options.bunyanSlackObject = _getOption('bunyanSlackObject' , opts);
 
   // Report Files
   options.reportJsonFile = path.join(options.reportDir, `${options.reportFilename}.json`);

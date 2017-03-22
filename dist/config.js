@@ -47,6 +47,7 @@ module.exports = function (opts) {
     opts.enableCode = opts.enableTestCode;
     delete opts.enableTestCode;
   }
+
   options.reportFilename = _getOption('reportFilename', opts);
   options.reportDir = path.resolve(_getOption('reportDir', opts));
   options.reportTitle = _getOption('reportTitle', opts);
@@ -57,9 +58,9 @@ module.exports = function (opts) {
   options.enableCode = _getOption('enableCode', opts, true);
   options.quiet = _getOption('quiet', opts, true);
   options.dev = _getOption('dev', opts, true);
-  options.writeReporte      = _getOption('writeReporte', opts ,  true);
-  options.bunyanSlack       = _getOption('bunyanSlack' , opts , true);
-  options.bunyanSlackObject = _getOption('bunyanSlackObject' , opts);
+  options.writeReporte = _getOption('writeReporte', opts, true);
+  options.bunyanSlack = _getOption('bunyanSlack', opts, true);
+  options.bunyanSlackObject = _getOption('bunyanSlackObject', opts);
 
   // Report Files
   options.reportJsonFile = path.join(options.reportDir, options.reportFilename + '.json');
