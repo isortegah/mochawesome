@@ -25,36 +25,43 @@ var done = function () {
           case 0:
             reportJsonFile = config.reportJsonFile, reportHtmlFile = config.reportHtmlFile;
             _context.prev = 1;
-            _context.next = 4;
+
+            if (!config.writeReporte) {
+              _context.next = 9;
+              break;
+            }
+
+            _context.next = 5;
             return saveFile(reportJsonFile, output);
 
-          case 4:
+          case 5:
             log('Report JSON saved to ' + reportJsonFile, null, config);
 
             // Create and save the HTML to disk
-            _context.next = 7;
+            _context.next = 8;
             return marge.create(output, config);
 
-          case 7:
+          case 8:
             log('Report HTML saved to ' + reportHtmlFile, null, config);
 
+          case 9:
             exit(failures);
-            _context.next = 15;
+            _context.next = 16;
             break;
 
-          case 11:
-            _context.prev = 11;
+          case 12:
+            _context.prev = 12;
             _context.t0 = _context['catch'](1);
 
             log(_context.t0, 'error', config);
             exit(failures);
 
-          case 15:
+          case 16:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[1, 11]]);
+    }, _callee, this, [[1, 12]]);
   }));
 
   return function done(_x, _x2, _x3, _x4) {

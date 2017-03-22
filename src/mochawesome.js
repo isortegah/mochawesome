@@ -28,14 +28,15 @@ const totalTestsRegistered = { total: 0 };
 async function done(output, config, failures, exit) {
   const { reportJsonFile, reportHtmlFile } = config;
   try {
-    // Save the JSON to disk
-    await saveFile(reportJsonFile, output);
-    log(`Report JSON saved to ${reportJsonFile}`, null, config);
+    if(config.writeReporte){
+      // Save the JSON to disk
+      await saveFile(reportJsonFile, output);
+      log(`Report JSON saved to ${reportJsonFile}`, null, config);
 
-    // Create and save the HTML to disk
-    await marge.create(output, config);
-    log(`Report HTML saved to ${reportHtmlFile}`, null, config);
-
+      // Create and save the HTML to disk
+      await marge.create(output, config);
+      log(`Report HTML saved to ${reportHtmlFile}`, null, config);
+    }
     exit(failures);
   } catch (err) {
     log(err, 'error', config);
