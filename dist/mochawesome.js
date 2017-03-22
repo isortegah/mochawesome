@@ -113,6 +113,9 @@ var totalTestsRegistered = { total: 0 };function Mochawesome(runner, options) {
   // Call the Base mocha reporter
   mocha.reporters.Base.call(this, runner);
 
+  var bunyan = require("bunyan"),
+      BunyanSlack = require('bunyan-slack'),
+      logs;
   // Show the Spec Reporter in the console
   new mocha.reporters.Spec(runner); // eslint-disable-line
 
