@@ -13,7 +13,10 @@ const baseConfig = {
   dev: false,
   writeReporte: true,
   bunyanSlack: false,
-  bunyanSlackObject: {}
+  bunyanSlackName: '',
+  bunyanSlackHook: '',
+  bunyanSlackChannel: '',
+  bunyanSlackUsername:''
 };
 
 function _getOption(optToGet, options, isBool) {
@@ -56,7 +59,10 @@ module.exports = function (opts) {
   options.dev = _getOption('dev', opts, true);
   options.writeReporte      = _getOption('writeReporte', opts ,  true);
   options.bunyanSlack       = _getOption('bunyanSlack' , opts , true);
-  options.bunyanSlackObject = _getOption('bunyanSlackObject' , opts);
+  options.bunyanSlackName     = _getOption('bunyanSlackName', opts);
+  options.bunyanSlackHook     = _getOption('bunyanSlackHook', opts);
+  options.bunyanSlackChannel  = _getOption('bunyanSlackChannel', opts);
+  options.bunyanSlackUsername = _getOption('bunyanSlackUsername', opts);
 
   // Report Files
   options.reportJsonFile = path.join(options.reportDir, `${options.reportFilename}.json`);
