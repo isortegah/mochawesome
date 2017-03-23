@@ -44,6 +44,32 @@ async function done(output, config, failures, exit) {
   }
 }
 
+ async function login(opciones){
+  console.log("Desde login");
+  try{
+    await logger(opciones);
+  }catch(err){
+    log ("error");
+  }
+
+
+}
+
+async function asyncFun (opciones) {
+    console.log("dentro de await");
+    const request = require('request-promise');
+    return  request.post({
+      url: opciones.bunyanSlackHook,
+      body: JSON.stringify({"channel":"#canalqa","username":"@iortega","text":"[INFO] Pruebas"})
+	  }).then(function (body){
+      console.log(body);
+      return Promise.resolve();
+     });
+    //loggers.info("Funcion");
+  return value;
+}
+
+
 /**
  * Initialize a new reporter.
  *
@@ -67,7 +93,22 @@ function Mochawesome(runner, options) {
   mocha.reporters.Base.call(this, runner);
   var bunyan  = require("bunyan"),
       BunyanSlack = require('bunyan-slack'),
-      logs;
+      request = require('request'),
+      loggers;
+
+  var opciones = conf(reporterOpts);
+  loggers = bunyan.createLogger({
+    name : opciones.bunyanSlackName,
+    streams : [{
+      stream : new BunyanSlack({
+        webhook_url : opciones.bunyanSlackHook,
+        channel : opciones.bunyanSlackChannel,
+        username : opciones.bunyanSlackUsername
+      })
+    }]
+  });
+
+
   // Show the Spec Reporter in the console
   new mocha.reporters.Spec(runner); // eslint-disable-line
 
@@ -77,12 +118,27 @@ function Mochawesome(runner, options) {
   const allPasses = [];
   let endCalled = false;
 
+
+  async function logToSlack(delay) {
+    console.log('async working!')
+  }
   // Add a unique identifier to each test
   runner.on('test', test => (test.uuid = uuid.v4()));
 
   // Add test to array of all tests
   runner.on('test end', test => allTests.push(test));
 
+  runner.on('test end', async function(test){
+    const request = require('request-promise');
+    console.log('test started');
+    let p = request.post({
+        url: opciones.bunyanSlackHook,
+        body: JSON.stringify({"channel":"#canalqa","username":"@iortega","text":"[INFO] Pruebas"})
+      })
+    await p
+         
+    console.log('test finished');
+  });
   // Add pending test to array of pending tests
   runner.on('pending', test => {
     test.uuid = uuid.v4();
@@ -96,7 +152,7 @@ function Mochawesome(runner, options) {
   runner.on('fail', test => allFailures.push(test));
 
   // Process the full suite
-  runner.on('end', () => {
+  runner.on('end', () => { 
     try {
       /* istanbul ignore else */
       if (!endCalled) {
@@ -133,6 +189,7 @@ function Mochawesome(runner, options) {
         obj.stats.failures -= obj.stats.other;
         obj.stats.passPercentClass = getPercentClass(passPercentage);
         obj.stats.pendingPercentClass = getPercentClass(pendingPercentage);
+
 
         // Save the final output to be used in the done function
         this.output = stringify(obj, null, 2);

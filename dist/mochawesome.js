@@ -1,5 +1,13 @@
 'use strict';
 
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -69,6 +77,70 @@ var done = function () {
   };
 }();
 
+var login = function () {
+  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(opciones) {
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            console.log("Desde login");
+            _context2.prev = 1;
+            _context2.next = 4;
+            return logger(opciones);
+
+          case 4:
+            _context2.next = 9;
+            break;
+
+          case 6:
+            _context2.prev = 6;
+            _context2.t0 = _context2['catch'](1);
+
+            log("error");
+
+          case 9:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this, [[1, 6]]);
+  }));
+
+  return function login(_x5) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+var asyncFun = function () {
+  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(opciones) {
+    var request;
+    return _regenerator2.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            console.log("dentro de await");
+            request = require('request-promise');
+            return _context3.abrupt('return', request.post({
+              url: opciones.bunyanSlackHook,
+              body: (0, _stringify2.default)({ "channel": "#canalqa", "username": "@iortega", "text": "[INFO] Pruebas" })
+            }).then(function (body) {
+              console.log(body);
+              return _promise2.default.resolve();
+            }));
+
+          case 4:
+          case 'end':
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  return function asyncFun(_x6) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
 /**
  * Initialize a new reporter.
  *
@@ -97,6 +169,29 @@ var log = utils.log,
 var totalTestsRegistered = { total: 0 };function Mochawesome(runner, options) {
   var _this = this;
 
+  var logToSlack = function () {
+    var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(delay) {
+      return _regenerator2.default.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              console.log('async working!');
+
+            case 1:
+            case 'end':
+              return _context4.stop();
+          }
+        }
+      }, _callee4, this);
+    }));
+
+    return function logToSlack(_x7) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  // Add a unique identifier to each test
+
+
   // Done function will be called before mocha exits
   // This is where we will save JSON and generate the report
   this.done = function (failures, exit) {
@@ -114,7 +209,21 @@ var totalTestsRegistered = { total: 0 };function Mochawesome(runner, options) {
   mocha.reporters.Base.call(this, runner);
   var bunyan = require("bunyan"),
       BunyanSlack = require('bunyan-slack'),
-      logs;
+      request = require('request'),
+      loggers;
+
+  var opciones = conf(reporterOpts);
+  loggers = bunyan.createLogger({
+    name: opciones.bunyanSlackName,
+    streams: [{
+      stream: new BunyanSlack({
+        webhook_url: opciones.bunyanSlackHook,
+        channel: opciones.bunyanSlackChannel,
+        username: opciones.bunyanSlackUsername
+      })
+    }]
+  });
+
   // Show the Spec Reporter in the console
   new mocha.reporters.Spec(runner); // eslint-disable-line
 
@@ -124,7 +233,6 @@ var totalTestsRegistered = { total: 0 };function Mochawesome(runner, options) {
   var allPasses = [];
   var endCalled = false;
 
-  // Add a unique identifier to each test
   runner.on('test', function (test) {
     return test.uuid = uuid.v4();
   });
@@ -134,6 +242,39 @@ var totalTestsRegistered = { total: 0 };function Mochawesome(runner, options) {
     return allTests.push(test);
   });
 
+  runner.on('test end', function () {
+    var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(test) {
+      var request, p;
+      return _regenerator2.default.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              request = require('request-promise');
+
+              console.log('test started');
+              p = request.post({
+                url: opciones.bunyanSlackHook,
+                body: (0, _stringify2.default)({ "channel": "#canalqa", "username": "@iortega", "text": "[INFO] Pruebas" })
+              });
+              _context5.next = 5;
+              return p;
+
+            case 5:
+
+              console.log('test finished');
+
+            case 6:
+            case 'end':
+              return _context5.stop();
+          }
+        }
+      }, _callee5, this);
+    }));
+
+    return function (_x8) {
+      return _ref5.apply(this, arguments);
+    };
+  }());
   // Add pending test to array of pending tests
   runner.on('pending', function (test) {
     test.uuid = uuid.v4();
