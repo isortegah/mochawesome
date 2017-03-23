@@ -190,7 +190,6 @@ function Mochawesome(runner, options) {
         obj.stats.passPercentClass = getPercentClass(passPercentage);
         obj.stats.pendingPercentClass = getPercentClass(pendingPercentage);
 
-
         // Save the final output to be used in the done function
         this.output = stringify(obj, null, 2);
       }

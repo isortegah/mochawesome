@@ -233,6 +233,7 @@ var totalTestsRegistered = { total: 0 };function Mochawesome(runner, options) {
   var allPasses = [];
   var endCalled = false;
 
+  // Add a unique identifier to each test
   runner.on('test', function (test) {
     return test.uuid = uuid.v4();
   });
