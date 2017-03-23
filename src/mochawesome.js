@@ -67,7 +67,21 @@ function Mochawesome(runner, options) {
   mocha.reporters.Base.call(this, runner);
   var bunyan  = require("bunyan"),
       BunyanSlack = require('bunyan-slack'),
-      logs;
+      logger;
+
+  var opciones = conf(reporterOpts);
+  logger = bunyan.createLogger({
+    name : opciones.bunyanSlackName,
+    streams : [{
+      stream : new BunyanSlack({
+        webhook_url : opciones.bunyanSlackHook,
+        channel : opciones.bunyanSlackChannel,
+        username : opciones.bunyanSlackUsername
+      })
+    }]
+  });
+
+  logger.info('Prueba')
   // Show the Spec Reporter in the console
   new mocha.reporters.Spec(runner); // eslint-disable-line
 
