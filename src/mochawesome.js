@@ -129,15 +129,7 @@ function Mochawesome(runner, options) {
   runner.on('test end', test => allTests.push(test));
 
   runner.on('test end', async function(test){
-    const request = require('request-promise');
-    console.log('test started');
-    let p = request.post({
-        url: opciones.bunyanSlackHook,
-        body: JSON.stringify({"channel":"#canalqa","username":"@iortega","text":"[INFO] Pruebas"})
-      })
-    await p
-         
-    console.log('test finished');
+    
   });
   // Add pending test to array of pending tests
   runner.on('pending', test => {
