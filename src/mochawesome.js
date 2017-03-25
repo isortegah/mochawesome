@@ -44,32 +44,6 @@ async function done(output, config, failures, exit) {
   }
 }
 
- async function login(opciones){
-  console.log("Desde login");
-  try{
-    await logger(opciones);
-  }catch(err){
-    log ("error");
-  }
-
-
-}
-
-async function asyncFun (opciones) {
-    console.log("dentro de await");
-    const request = require('request-promise');
-    return  request.post({
-      url: opciones.bunyanSlackHook,
-      body: JSON.stringify({"channel":"#canalqa","username":"@iortega","text":"[INFO] Pruebas"})
-	  }).then(function (body){
-      console.log(body);
-      return Promise.resolve();
-     });
-    //loggers.info("Funcion");
-  return value;
-}
-
-
 /**
  * Initialize a new reporter.
  *
@@ -107,6 +81,8 @@ function Mochawesome(runner, options) {
       })
     }]
   });
+
+  console.log(opciones);
 
 
   // Show the Spec Reporter in the console
